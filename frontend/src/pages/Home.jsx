@@ -10,8 +10,8 @@ import {
 } from 'framer-motion'
 
 import Video from '../components/home/Video'
-import HomeHeroText from '../components/Home/HomeHeroText'
-import HomeBottomText from '../components/Home/HomeBottomText'
+import HomeHeroText from '../components/home/HomeHeroText'
+import HomeBottomText from '../components/home/HomeBottomText'
 import FloatingChatbot from '../components/home/FloatingChatbot'
 
 const Home = () => {
