@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { User, ChevronDown, Bell } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
+import { supabase } from '../supabaseClient'
 import {
   motion,
   useScroll,
@@ -64,14 +65,14 @@ const Home = () => {
         <div className="relative z-20 h-full flex flex-col justify-between">
 
           {/* ANIMATED HEADER BAR */}
-          <motion.div 
+          <motion.div
             initial={{ y: -100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="absolute top-0 left-0 right-0 backdrop-blur-md bg-black/20"
           >
             <div className="max-w-screen-2xl mx-auto px-8 py-4 flex items-center justify-between">
-              
+
               {/* ANIMATED LOGO */}
               <motion.div
                 initial={{ x: -50, opacity: 0 }}
@@ -106,17 +107,17 @@ const Home = () => {
                   >
                     {/* Animated Background */}
                     <span className='absolute inset-0 bg-gradient-to-r from-blue-600/20 to-cyan-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700'></span>
-                    
+
                     {/* Single Rotating Ring */}
                     <span className='absolute inset-0 border-2 border-blue-400/0 group-hover:border-blue-400/40 rounded-full animate-spin-slow transition-all duration-700'></span>
-                    
+
                     {/* Corner Particles */}
                     <span className='absolute top-1 right-1 w-1 h-1 bg-blue-400 rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-ping'></span>
                     <span className='absolute bottom-1 left-1 w-1 h-1 bg-cyan-400 rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-ping' style={{ animationDelay: '0.2s' }}></span>
-                    
+
                     {/* Shimmer */}
                     <span className='absolute inset-0 bg-gradient-to-r from-transparent via-blue-400/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 skew-x-12'></span>
-                    
+
                     {/* Content */}
                     <span className='relative flex items-center gap-2 text-gray-300 group-hover:text-white font-semibold text-sm'>
                       <svg className="w-4 h-4 group-hover:rotate-[360deg] group-hover:scale-110 transition-all duration-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -124,7 +125,7 @@ const Home = () => {
                       </svg>
                       <span className='group-hover:tracking-wider transition-all duration-500'>Developers Feed</span>
                     </span>
-                    
+
                     {/* Outer Glow */}
                     <span className='absolute -inset-1 bg-blue-500 rounded-full blur-md opacity-0 group-hover:opacity-40 transition-opacity duration-700'></span>
                   </Link>
@@ -141,17 +142,17 @@ const Home = () => {
                   >
                     {/* Animated Background */}
                     <span className='absolute inset-0 bg-gradient-to-r from-amber-600/20 to-orange-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700'></span>
-                    
+
                     {/* Pulsing Ring */}
                     <span className='absolute inset-0 border-2 border-amber-400/0 group-hover:border-amber-400/40 rounded-full animate-pulse transition-all duration-700'></span>
-                    
+
                     {/* Sparkle Particles */}
                     <span className='absolute top-1 left-1/2 w-1 h-1 bg-amber-400 rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-ping'></span>
                     <span className='absolute bottom-1 right-1/3 w-1 h-1 bg-orange-400 rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-ping' style={{ animationDelay: '0.15s' }}></span>
-                    
+
                     {/* Shimmer */}
                     <span className='absolute inset-0 bg-gradient-to-r from-transparent via-amber-400/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 skew-x-12'></span>
-                    
+
                     {/* Content */}
                     <span className='relative flex items-center gap-2 text-gray-300 group-hover:text-white font-semibold text-sm'>
                       <div className="relative">
@@ -162,7 +163,7 @@ const Home = () => {
                       </div>
                       <span className='group-hover:tracking-wider transition-all duration-500'>Alerts</span>
                     </span>
-                    
+
                     {/* Outer Glow */}
                     <span className='absolute -inset-1 bg-amber-500 rounded-full blur-md opacity-0 group-hover:opacity-40 transition-opacity duration-700'></span>
                   </Link>
@@ -170,7 +171,7 @@ const Home = () => {
               </div>
 
               {/* EPIC PROFILE BUTTON - ANIMATED */}
-              <motion.div 
+              <motion.div
                 className='relative'
                 initial={{ x: 50, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
@@ -182,11 +183,11 @@ const Home = () => {
                 >
                   {/* Animated Background Layers */}
                   <span className='absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 opacity-0 group-hover:opacity-30 transition-opacity duration-700'></span>
-                  
+
                   {/* Rotating Rings */}
                   <span className='absolute inset-0 border-2 border-blue-500/0 group-hover:border-blue-500/60 rounded-full animate-spin-slow transition-all duration-700'></span>
                   <span className='absolute inset-0 border-2 border-purple-500/0 group-hover:border-purple-500/60 rounded-full animate-spin-reverse transition-all duration-700'></span>
-                  
+
                   {/* Particle Burst */}
                   <span className='absolute inset-0'>
                     <span className='absolute top-0 left-1/2 w-1 h-1 bg-blue-400 rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-ping'></span>
@@ -194,29 +195,29 @@ const Home = () => {
                     <span className='absolute left-0 top-1/2 w-1 h-1 bg-pink-400 rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-ping' style={{ animationDelay: '0.3s' }}></span>
                     <span className='absolute right-0 top-1/2 w-1 h-1 bg-cyan-400 rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-ping' style={{ animationDelay: '0.45s' }}></span>
                   </span>
-                  
+
                   {/* Shimmer */}
                   <span className='absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 skew-x-12'></span>
-                  
+
                   {/* Avatar */}
                   <div className='relative w-9 h-9 bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 rounded-full flex items-center justify-center group-hover:rotate-[360deg] transition-transform duration-700 shadow-lg'>
                     <User className='relative w-4 h-4 text-white drop-shadow-lg' />
                   </div>
-                  
+
                   {/* Text */}
                   <span className='relative font-bold text-sm text-gray-200 group-hover:tracking-wider group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-400 group-hover:via-purple-400 group-hover:to-pink-400 transition-all duration-500'>
                     Profile
                   </span>
-                  
+
                   {/* Chevron */}
                   <ChevronDown className={`relative w-4 h-4 transition-all duration-500 group-hover:text-purple-400 ${isProfileOpen ? 'rotate-180' : ''} group-hover:animate-bounce`} />
-                  
+
                   {/* Outer Glow */}
                   <span className='absolute -inset-2 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-full blur-lg opacity-0 group-hover:opacity-60 transition-opacity duration-700'></span>
                 </button>
 
                 {isProfileOpen && (
-                  <motion.div 
+                  <motion.div
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     className='absolute top-full right-0 mt-4 w-56 bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-700/50 overflow-hidden'
@@ -229,7 +230,10 @@ const Home = () => {
                         </div>
                       </Link>
                       <div className='h-px bg-gray-700/50 my-2'></div>
-                      <button onClick={() => navigate('/login')} className='w-full text-left px-4 py-3 text-red-400 hover:bg-red-900/30 rounded-xl transition-all duration-300 hover:translate-x-2'>
+                      <button onClick={async () => {
+                        await supabase.auth.signOut()
+                        navigate('/login')
+                      }} className='w-full text-left px-4 py-3 text-red-400 hover:bg-red-900/30 rounded-xl transition-all duration-300 hover:translate-x-2'>
                         <div className='flex items-center gap-3'>
                           <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                             <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1'></path>
@@ -296,11 +300,11 @@ const Home = () => {
             {/* FLOATING IMAGE - Better Sized */}
             <motion.div
               initial={{ x: -100, opacity: 0 }}
-              whileInView={{ 
-                x: 0, 
+              whileInView={{
+                x: 0,
                 opacity: 1
               }}
-              transition={{ 
+              transition={{
                 duration: 0.8,
                 ease: 'easeOut'
               }}
@@ -314,7 +318,7 @@ const Home = () => {
               >
                 {/* Glow effect */}
                 <div className="absolute -inset-4 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-full opacity-20 group-hover:opacity-40 blur-2xl transition-opacity duration-700"></div>
-                
+
                 {/* Image */}
                 <img
                   src="https://images.unsplash.com/photo-1504805572947-34fad45aed93?q=80&w=2070&auto=format&fit=crop"
@@ -333,7 +337,7 @@ const Home = () => {
                     transition-all duration-700
                   "
                 />
-                
+
                 {/* Rotating ring */}
                 <div className="absolute inset-0 border-2 border-blue-500/30 rounded-full animate-spin-slow"></div>
               </motion.div>
@@ -348,7 +352,7 @@ const Home = () => {
               viewport={{ once: true, amount: 0.3 }}
               className="order-1 lg:order-2 space-y-8"
             >
-              <motion.p 
+              <motion.p
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 transition={{ delay: 0.3 }}
@@ -380,7 +384,7 @@ const Home = () => {
                 </p>
               </motion.div>
 
-              <motion.button 
+              <motion.button
                 initial={{ opacity: 0, scale: 0.8 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.7 }}
