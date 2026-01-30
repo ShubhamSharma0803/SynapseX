@@ -12,7 +12,7 @@ import Agence from './pages/Agence';
 import Projects from './pages/Projects';
 import Alerts from './pages/Alerts';
 import Profile from './pages/Profile';
-import Onboarding from './pages/Onboarding'; // We will create this file next
+import Onboarding from './pages/Onboarding'; 
 
 function App() {
   const navigate = useNavigate();
@@ -24,16 +24,20 @@ function App() {
       const { data: { session } } = await supabase.auth.getSession();
 
       if (session) {
-        // 2. Check the "profiles" table for manual details
+        // 2. Check the "profiles" table for the onboarding flag
         const { data: profile, error } = await supabase
           .from('profiles')
-          .select('onboarding_completed') // Assuming you have this flag or check for any field
+          .select('onboarding_completed') 
           .eq('id', session.user.id)
           .single();
 
         // 3. Traffic Control: If no profile or onboarding not done, force Onboarding
-        if (error || !profile) {
-          navigate('/onboarding');
+        // If profile doesn't exist or flag is false, we send them to /onboarding
+        if (error || !profile || profile.onboarding_completed === false) {
+          // Prevent infinite redirect if they are already on the onboarding page
+          if (window.location.pathname !== '/onboarding') {
+            navigate('/onboarding');
+          }
         }
       }
       setIsChecking(false);
@@ -43,13 +47,18 @@ function App() {
 
     // Listen for auth changes (like logging in for the first time)
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session) checkUserStatus();
+      if (session) {
+        checkUserStatus();
+      } else {
+        // If logged out, reset check and potentially redirect to login
+        setIsChecking(false);
+      }
     });
 
     return () => subscription.unsubscribe();
   }, [navigate]);
 
-  if (isChecking) return null; // Prevent flicker during the check
+  if (isChecking) return null; // Prevent UI flicker
 
   return (
     <>
@@ -69,7 +78,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         
-        {/* Onboarding Route - The "Manual Details" Form */}
+        {/* Onboarding Route */}
         <Route path="/onboarding" element={<Onboarding />} />
 
         {/* Protected Routes */}
