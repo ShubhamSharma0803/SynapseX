@@ -8,18 +8,19 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
-# Initialize Supabase client
+# Initialize Supabase client credentials
 SUPABASE_URL: str = os.getenv("SUPABASE_URL")
-SUPABASE_KEY: str = os.getenv("SUPABASE_KEY")
+# Use the Service Role Key for backend administrative authentication checks
+SUPABASE_SERVICE_ROLE_KEY: str = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
 
 # Validate environment variables
-if not SUPABASE_URL or not SUPABASE_KEY:
+if not SUPABASE_URL or not SUPABASE_SERVICE_ROLE_KEY:
     raise ValueError(
-        "SUPABASE_URL and SUPABASE_KEY must be set in the .env file"
+        "SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set in the .env file"
     )
 
-# Create Supabase client
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+# Create Supabase client with Service Role privileges
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
 
 # Initialize HTTPBearer security scheme
 security = HTTPBearer()
@@ -32,7 +33,7 @@ async def get_current_user(
     Dependency function to verify and extract the current user from the JWT token.
     
     This function validates the Bearer token from the Authorization header
-    using Supabase Auth and returns the authenticated user object.
+    using Supabase Auth (Admin level) and returns the authenticated user object.
     
     Args:
         token: HTTPAuthorizationCredentials containing the Bearer token
@@ -42,18 +43,15 @@ async def get_current_user(
         
     Raises:
         HTTPException: 401 Unauthorized if token is invalid, expired, or missing
-        
-    Example:
-        @app.get("/protected")
-        async def protected_route(user = Depends(get_current_user)):
-            return {"user_id": user["id"]}
     """
     try:
-        # Verify the token with Supabase Auth
+        # Verify the token with Supabase Auth using the Admin client
+        # .get_user() validates the JWT sent from the frontend
         response = supabase.auth.get_user(token.credentials)
         
         # Check if user data is present in the response
         if response and response.user:
+            # Cast User object to dict for easier use in routes
             return response.user
         else:
             raise HTTPException(
