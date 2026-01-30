@@ -35,3 +35,5 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
 if (import.meta.env.DEV && supabaseUrl && supabaseAnonKey) {
   console.log('✅ Supabase client initialized successfully')
 }
+
+export default supabase;
