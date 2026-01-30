@@ -16,9 +16,14 @@ app = FastAPI(
 )
 
 # Configure CORS middleware
+# Configure CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, replace with specific origins
+    # Replace the "*" with your actual Netlify URL
+    allow_origins=[
+        "http://localhost:5173",          # Keep for local development
+        "https://synapse0803.netlify.app" # Your live frontend URL
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
