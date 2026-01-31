@@ -25,7 +25,7 @@ function App() {
     const initializeAuth = async () => {
       const { data: { session: activeSession } } = await supabase.auth.getSession(); //
       setSession(activeSession);
-      
+
       if (activeSession) {
         await checkProfileStatus(activeSession.user.id);
       } else {
@@ -55,10 +55,23 @@ function App() {
         .from('profiles')
         .select('onboarding_completed')
         .eq('id', userId)
-        .single(); //
+        .maybeSingle(); // Use maybeSingle to handle missing rows without error
 
-      // If profile is missing or onboarding is not complete, redirect to onboarding
-      if (error || !profile || !profile.onboarding_completed) {
+      if (error) {
+        console.error("Error fetching profile:", error);
+        return;
+      }
+
+      // If profile is missing (new user) or onboarding is explicitly false
+      if (!profile || !profile.onboarding_completed) {
+
+        // DEVELOPMENT OVERRIDE: Allow free navigation
+        if (import.meta.env.DEV) {
+          console.warn("[Traffic Controller] Onboarding incomplete, but redirect suppressed (DEV MODE).");
+          return;
+        }
+
+        // PRODUCTION BEHAVIOR: Force redirect
         if (location.pathname !== '/onboarding') {
           navigate('/onboarding', { replace: true });
         }
@@ -74,20 +87,20 @@ function App() {
 
   return (
     <>
-      <Toaster 
-        theme="dark" 
-        position="top-right" 
-        expand={false} 
-        richColors 
-        closeButton 
-        style={{ zIndex: 9999 }} 
+      <Toaster
+        theme="dark"
+        position="top-right"
+        expand={false}
+        richColors
+        closeButton
+        style={{ zIndex: 9999 }}
       />
       <Routes>
         {/* Public/Auth Routes */}
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
-        
+
         {/* Onboarding Route */}
         <Route path="/onboarding" element={session ? <Onboarding /> : <Navigate to="/login" />} />
 
@@ -98,7 +111,7 @@ function App() {
         <Route path="/createproject" element={session ? <Projects /> : <Navigate to="/login" />} />
         <Route path="/alerts" element={session ? <Alerts /> : <Navigate to="/login" />} />
         <Route path="/profile" element={session ? <Profile /> : <Navigate to="/login" />} />
-        
+
         {/* Catch-all */}
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
